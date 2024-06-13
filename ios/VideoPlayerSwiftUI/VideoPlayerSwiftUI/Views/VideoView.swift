@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVKit
+import MarkdownKit
 
 struct VideoView: View {
     @ObservedObject var videoVM = VideoViewModel()
@@ -68,8 +69,22 @@ struct VideoView: View {
                 }
                 
                 Spacer()
+                
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        Text(self.videoVM.videos[selectedIndex].title)
+                            .font(.title3)
+                            .bold()
+                        
+                        Text(self.videoVM.videos[selectedIndex].author.name)
+                            .font(.subheadline)
+                        
+                        Text("\(MarkdownParser().parse(self.videoVM.videos[selectedIndex].description))")
+                            .padding([.top])
+                    }.padding(10)
+                    
+                }
             }
-            //TODO: details section
         }
         .onAppear() {
             Task {
