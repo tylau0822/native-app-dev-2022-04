@@ -8,17 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @ObservedObject var videoVM = VideoViewModel()
-    
+
     var body: some View {
-        Text("Hello, world!")
-            .padding()
-            .onAppear() {
-                Task {
-                    await videoVM.fetchVideos()
-                }
-            }
+        VideoView()
     }
 }
 
