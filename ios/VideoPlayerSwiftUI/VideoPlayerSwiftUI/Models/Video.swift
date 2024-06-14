@@ -7,6 +7,7 @@
 
 import Foundation
 
+//Assuming all data is not nil
 struct Video: Decodable {
     let id: String
     let title: String

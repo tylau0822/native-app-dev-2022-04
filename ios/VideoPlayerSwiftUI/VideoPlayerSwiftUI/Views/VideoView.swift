@@ -96,6 +96,7 @@ struct VideoView: View {
                 }
             }
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+            // Pause the video when the app enters background
             self.playerVM.pauseVideo()
         }
     }

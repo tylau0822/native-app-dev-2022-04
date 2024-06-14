@@ -31,6 +31,7 @@ class VideoViewModel: ObservableObject {
     func fetchVideos() async {
         do {
             if let videos = try await NetworkManager().fetchVideos() {
+                //Sort the list of videos by date
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
                 dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
