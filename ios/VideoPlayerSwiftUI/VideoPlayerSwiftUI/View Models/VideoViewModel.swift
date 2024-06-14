@@ -10,6 +10,23 @@ import Foundation
 class VideoViewModel: ObservableObject {
     
     @Published var videos: [Video] = []
+    @Published var selectedIndex: Int = 0
+    
+    var title: String {
+        return self.videos.isEmpty ? "" : self.videos[selectedIndex].title
+    }
+    
+    var fullURL: String {
+        return self.videos.isEmpty ? "" : self.videos[selectedIndex].fullURL
+    }
+    
+    var description: String {
+        return self.videos.isEmpty ? "" : self.videos[selectedIndex].description
+    }
+    
+    var authorName: String {
+        return self.videos.isEmpty ? "" : self.videos[selectedIndex].author.name
+    }
     
     func fetchVideos() async {
         do {

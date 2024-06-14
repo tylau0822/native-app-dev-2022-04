@@ -12,7 +12,6 @@ import MarkdownKit
 struct VideoView: View {
     @ObservedObject var videoVM = VideoViewModel()
     @ObservedObject var playerVM = PlayerViewModel()
-    @State var selectedIndex: Int = 0
     
     var body: some View {
         VStack {
@@ -29,17 +28,17 @@ struct VideoView: View {
                     
                     HStack(spacing: 20) {
                         Button {
-                            selectedIndex = selectedIndex - 1
-                            self.playerVM.loadVideo(from: self.videoVM.videos[selectedIndex].fullURL)
+                            videoVM.selectedIndex = videoVM.selectedIndex - 1
+                            self.playerVM.loadVideo(from: self.videoVM.fullURL)
                         } label: {
                             Image("previous")
                                 .frame(width: 60, height: 60)
                                 .background(RoundedRectangle(
                                     cornerRadius: 50,
                                     style: .continuous)
-                                    .fill(.white.opacity(selectedIndex == 0 ? 0.3 : 0.8))
+                                    .fill(.white.opacity(videoVM.selectedIndex == 0 ? 0.3 : 0.8))
                                 )
-                        }.disabled(selectedIndex == 0)
+                        }.disabled(videoVM.selectedIndex == 0)
                         
                         Button {
                             self.playerVM.isPlaying ? self.playerVM.pauseVideo() : self.playerVM.playVideo()
@@ -54,17 +53,17 @@ struct VideoView: View {
                         }
                         
                         Button {
-                            selectedIndex = selectedIndex + 1
-                            self.playerVM.loadVideo(from: self.videoVM.videos[selectedIndex].fullURL)
+                            videoVM.selectedIndex = videoVM.selectedIndex + 1
+                            self.playerVM.loadVideo(from: self.videoVM.fullURL)
                         } label: {
                             Image("next")
                                 .frame(width: 60, height: 60)
                                 .background(RoundedRectangle(
                                     cornerRadius: 50,
                                     style: .continuous)
-                                    .fill(.white.opacity(selectedIndex >= videoVM.videos.count-1 ? 0.3 : 0.8))
+                                    .fill(.white.opacity(videoVM.selectedIndex >= videoVM.videos.count-1 ? 0.3 : 0.8))
                                 )
-                        }.disabled(selectedIndex >= videoVM.videos.count-1)
+                        }.disabled(videoVM.selectedIndex >= videoVM.videos.count-1)
                     }
                 }
                 
@@ -72,14 +71,14 @@ struct VideoView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading) {
-                        Text(self.videoVM.videos[selectedIndex].title)
+                        Text(self.videoVM.title)
                             .font(.title3)
                             .bold()
                         
-                        Text(self.videoVM.videos[selectedIndex].author.name)
+                        Text(self.videoVM.authorName)
                             .font(.subheadline)
                         
-                        Text("\(MarkdownParser().parse(self.videoVM.videos[selectedIndex].description))")
+                        Text("\(MarkdownParser().parse(self.videoVM.description))")
                             .padding([.top])
                     }.padding(10)
                     
@@ -89,9 +88,9 @@ struct VideoView: View {
         .onAppear() {
             Task {
                 await videoVM.fetchVideos()
-                selectedIndex = 0
+                videoVM.selectedIndex = 0
                 if !videoVM.videos.isEmpty {
-                    playerVM.loadVideo(from: videoVM.videos[selectedIndex].fullURL)
+                    playerVM.loadVideo(from: videoVM.fullURL)
                 }
             }
         }
