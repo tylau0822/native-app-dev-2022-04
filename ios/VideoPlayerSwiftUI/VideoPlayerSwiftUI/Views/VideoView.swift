@@ -19,7 +19,9 @@ struct VideoView: View {
                 .font(.title2)
             
             if videoVM.videos.isEmpty {
-                ProgressView("Loading")
+                VStack {
+                    ProgressView("Loading")
+                }.frame(maxHeight: .infinity)
             } else {
                 ZStack {
                     VideoPlayer(player: self.playerVM.player)
@@ -93,6 +95,8 @@ struct VideoView: View {
                     playerVM.loadVideo(from: videoVM.fullURL)
                 }
             }
+        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+            self.playerVM.pauseVideo()
         }
     }
 }
